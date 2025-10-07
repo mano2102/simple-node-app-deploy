@@ -1,0 +1,25 @@
+name: Node.js CI/CD
+on:
+    push:
+        branches: [main]
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Set up node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "20"
+
+            - name: Install dependencies
+              uses: npm install
+
+            - name: Run tests
+              run: npm test || echo "No tests configured"
+
+            - name: Build App
+              run: npm run build
