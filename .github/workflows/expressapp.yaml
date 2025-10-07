@@ -22,4 +22,4 @@ jobs:
               run: npm test || echo "No tests configured"
 
             - name: Build App
-              run: npm run build || npm run start:prod || echo "No build script is there"
+              run: npm run build || echo "No build script is there"
