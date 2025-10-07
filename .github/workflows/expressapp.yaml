@@ -1,25 +1,36 @@
 name: Node.js CI/CD
+
 on:
-    push:
-        branches: [main]
+  push:
+    branches: [main]
+
 jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-            - name: Set up node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: "20"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
 
-            - name: Install dependencies
-              run: npm install
+      # Cache npm dependencies
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-            - name: Run tests
-              run: npm test || echo "No tests configured"
+      - name: Install dependencies
+        run: npm install
 
-            - name: Build App
-              run: npm run build || echo "No build script is there"
+      - name: Run tests
+        run: npm test || echo "No tests configured"
+
+      - name: Build App
+        run: npm run build || echo "No build script configured"
